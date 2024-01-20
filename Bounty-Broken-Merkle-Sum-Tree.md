@@ -1,5 +1,7 @@
 # Bounty Problem 1: Security Analysis of Summa's Proof of Solvency Protocol
 
+## In Draft Mode
+
 ## Introduction
 Summa, a protocol for proof of solvency, recently transitioned from the conventional Merkle Sum Tree to the Broken Merkle Sum Tree for efficiency reasons, as detailed in [Issue #166 on their GitHub repository](https://github.com/summa-dev/summa-solvency/issues/166). This bounty problem invites the ZK Fellows to conduct a thorough security review of Summa's implementation of the Broken Merkle Sum Tree.
 
