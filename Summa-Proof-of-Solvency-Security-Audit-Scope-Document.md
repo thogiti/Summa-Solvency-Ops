@@ -1,6 +1,6 @@
-# Zero Knowledge Proofs Security Review: Summa Proof of Solvency Protocol
+# Zero Knowledge Proofs Security Review: Summa Proof of Solvency Protocol (Version V1)
 
-## ***In Draft Mode***
+## In Draft Mode
 
 ## Introduction
 This document defines the scope of the security audit for the Summa proof of solvency protocol. The audit aims to evaluate the security, reliability, and integrity of the codebase, with a specific focus on zero-knowledge proofs.
@@ -52,6 +52,8 @@ The scope of this audit includes key areas such as codebase review, protocol flo
 
 ### Excluded from Audit
 - `/contracts/src/InclusionVerifier.sol`
+- `examples/nova_incremental_verifier.rs` (anything related to nova experiments)
+- `src/circom/*` (anything related to circom)
 - *Any files or folders not directly related to the core functionality of the Summa proof of solvency protocol.*
 
 ## Audit Methodology
