@@ -52,8 +52,8 @@ The scope of this audit includes key areas such as codebase review, protocol flo
 
 ### Excluded from Audit
 - `/contracts/src/InclusionVerifier.sol`
-- `examples/nova_incremental_verifier.rs` (anything related to nova experiments)
-- `src/circom/*` (anything related to circom)
+- `/examples/nova_incremental_verifier.rs` (anything related to nova experiments)
+- `/src/circom/*` (anything related to circom)
 - *Any files or folders not directly related to the core functionality of the Summa proof of solvency protocol.*
 
 ## Audit Methodology
