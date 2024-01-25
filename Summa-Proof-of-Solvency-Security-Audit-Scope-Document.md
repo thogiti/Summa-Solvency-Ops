@@ -1,7 +1,5 @@
 # Zero Knowledge Proofs Security Review: Summa Proof of Solvency Protocol (Version V1)
 
-## In Draft Mode
-
 ## Introduction
 This document defines the scope of the security audit for the Summa proof of solvency protocol. The audit aims to evaluate the security, reliability, and integrity of the codebase, with a specific focus on zero-knowledge proofs.
 
@@ -9,7 +7,8 @@ This document defines the scope of the security audit for the Summa proof of sol
 The scope of this audit includes key areas such as codebase review, protocol flow logic, security features review, zero-knowledge proof implementation, and testing and documentation.
 
 ### 1. Codebase Review
-- **Repository**: [Summa Solvency on GitHub](https://github.com/summa-dev/summa-solvency)
+- **Repository**: [Summa Solvency on GitHub](https://github.com/summa-dev/summa-solvency/tree/d6e85c9affebef338846d5fb13e40eb8ab657811)
+- **Commit Hash**: d6e85c9affebef338846d5fb13e40eb8ab657811 
 - **Objective**: Assess the security of the source code, identify vulnerabilities, and ensure best coding practices.
 - **Components**:
   - File Structure Analysis
@@ -54,7 +53,7 @@ The scope of this audit includes key areas such as codebase review, protocol flo
 - `/contracts/src/InclusionVerifier.sol`
 - `/examples/nova_incremental_verifier.rs` (anything related to nova experiments)
 - `/src/circom/*` (anything related to circom)
-- *Any files or folders not directly related to the core functionality of the Summa proof of solvency protocol.*
+- *If we find any file[s] not related to this commit hash, then we will add it here.*
 
 ## Audit Methodology
 The audit can combine automated tools and manual inspection by experts. It can include code review, static and dynamic analysis, and penetration testing.
