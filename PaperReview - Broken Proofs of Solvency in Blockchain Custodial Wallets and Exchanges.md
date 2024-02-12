@@ -97,6 +97,11 @@
 
 ## Vulnerable Summation Tree
 
+![Vulnerable Summation Tree Figure 1](https://github.com/thogiti/Summa-Solvency-Ops/blob/6b5d58a14d89b5afbb769af561f30968fad7549c/Vulnerable%20Summation%20Tree%20Fig%201.png)
+
+![Vulnerable Summation Tree Figure 2](https://github.com/thogiti/Summa-Solvency-Ops/blob/6b5d58a14d89b5afbb769af561f30968fad7549c/Vulnerable%20Summation%20Tree%20Fig%202.png)
+
+
 ### Exploitation Process (Fig 1 & 2)
 1. Initial Setup: The summation tree is constructed with each node's hash field defined as `h(v_l+v_r ∣∣ h(l) ∣∣ h(r))`, where `v_l` and `v_r` are the values of the left and right child nodes, respectively, and `l` and `r` denote the child nodes themselves.
 2. Manipulation: The exchange manipulates the computation for each parent node in the tree to only reflect the maximum value of the children's summed values `(v_l + v_r)`. This is done by computing each parent as `h(max(v_l + v_r) ∣∣ h(l) ∣∣ h(r))`, effectively creating a different "version" of the liabilities tree without detection by clients.
