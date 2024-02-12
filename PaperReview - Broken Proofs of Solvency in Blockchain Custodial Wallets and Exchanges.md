@@ -184,6 +184,12 @@
 4. Outsourcing to Trusted Auditors: One mitigation strategy is outsourcing proof generation to a trusted auditor, as seen in Kraken's approach. This can help mitigate issues related to private verification patterns but introduces privacy concerns regarding the auditor's knowledge of individual inclusions.
 5. Challenges and Potential Solutions: Efficiently hiding verification patterns without relying on a trusted third party remains a challenge. The paper mentions private information retrieval techniques as a proposed solution but acknowledges the complexity and open research questions in this area.
 
+## Conclusion
+- Limited Implementation: Few exchanges have adopted Proof of Solvency protocols, with even fewer implementing them accurately.
+- Identified Vulnerabilities: Highlights four distinct attack types impacting the integrity of these proofs.
+- Inconsistent Trust Models: Current implementations do not align well with blockchain's decentralization and privacy principles.
+- User Education: The slow adoption rate is partly attributed to a lack of user awareness and understanding.
+- Goal of the Future Work: Aims to set a practical standard for enhancing auditability and user trust in cryptocurrency exchanges by addressing these issues.
 
 
 
