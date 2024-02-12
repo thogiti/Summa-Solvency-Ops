@@ -98,14 +98,14 @@
 ## Vulnerable Summation Tree
 
 ### Exploitation Process (Fig 1 & 2)
-1. Initial Setup: The summation tree is constructed with each node's hash field defined as h(vl+vr ∣∣ h(l) ∣∣ h(r)), where vl and vr are the values of the left and right child nodes, respectively, and l and r denote the child nodes themselves.
-2. Manipulation: The exchange manipulates the computation for each parent node in the tree to only reflect the maximum value of the children's summed values (vl + vr). This is done by computing each parent as h(max(vl + vr) ∣∣ h(l) ∣∣ h(r)), effectively creating a different "version" of the liabilities tree without detection by clients.
-3. Understating Liabilities: Through this manipulation, the exchange can understate its total liabilities. For example, if two children have values vl = 5 and vr = 0, only the higher value (in this case, vl) would contribute to the parent's value, ignoring the other liabilities.
+1. Initial Setup: The summation tree is constructed with each node's hash field defined as `h(v_l+v_r ∣∣ h(l) ∣∣ h(r))`, where `v_l` and `v_r` are the values of the left and right child nodes, respectively, and `l` and `r` denote the child nodes themselves.
+2. Manipulation: The exchange manipulates the computation for each parent node in the tree to only reflect the maximum value of the children's summed values `(v_l + v_r)`. This is done by computing each parent as `h(max(v_l + v_r) ∣∣ h(l) ∣∣ h(r))`, effectively creating a different "version" of the liabilities tree without detection by clients.
+3. Understating Liabilities: Through this manipulation, the exchange can understate its total liabilities. For example, if two children have values `v_l = 5` and `v_r = 0`, only the higher value (in this case, `v_l`) would contribute to the parent's value, ignoring the other liabilities.
 4. Client Deception: A client receives a proof with a valid Merkle path that appears correct but does not accurately reflect all liabilities. This allows the exchange to report less than its actual total liabilities, potentially to the extent of only reporting the highest individual user balance as its total liabilities.
 
 ### Mitigation Strategy
-1. Tree Redefinition: The mitigation strategy involves redefining the hash field of each node in the tree to include both the left and right child values separately, alongside their hashes. Specifically, each node is defined as h(vl ∣∣ vr ∣∣ h(l) ∣∣ h(r)).
-2. Elimination of Manipulation: By including both vl and vr separately in the node's hash, the exchange cannot manipulate the tree to understate liabilities without detection. This construction ensures that the summation of liabilities is accurately represented at each node, preventing the creation of alternate "versions" of the liabilities tree.
+1. Tree Redefinition: The mitigation strategy involves redefining the hash field of each node in the tree to include both the left and right child values separately, alongside their hashes. Specifically, each node is defined as `h(v_l ∣∣ v_r ∣∣ h(l) ∣∣ h(r))`.
+2. Elimination of Manipulation: By including both `v_l` and `v_r` separately in the node's hash, the exchange cannot manipulate the tree to understate liabilities without detection. This construction ensures that the summation of liabilities is accurately represented at each node, preventing the creation of alternate "versions" of the liabilities tree.
 
 ## Short Hash Collisions
 ### Exploitation of Short Hash Collisions
@@ -123,7 +123,7 @@
 ### Exploitation Process
 1. Proof of Liabilities (PoL) Schemes: These schemes are designed to verify that an exchange or custodian (P) has sufficient assets to cover its liabilities towards users (U).
 2. User ID Uniqueness Flaw: In the flawed implementations, PoL schemes do not ensure the uniqueness of user IDs. Exchanges like Coinfloor, Kraken, BitMEX, and others have been observed using non-unique user IDs.
-3. Exploitation of Non-Uniqueness: A malicious prover (P) can exploit this flaw by assigning the same user ID to different users, especially when these users have identical balance amounts. This results in mapping multiple users to the same leaf node in the Merkle tree.
+3. Exploitation of Non-Uniqueness: A malicious prover (`P`) can exploit this flaw by assigning the same user ID to different users, especially when these users have identical balance amounts. This results in mapping multiple users to the same leaf node in the Merkle tree.
 4. Hiding Liabilities: By reusing the same user ID for different users, the prover can effectively hide liabilities. This is because the proofs of inclusion provided to users do not uniquely bind to their accounts, allowing the prover to claim less total liabilities without detection.
 
 ### Mitigation Strategy
@@ -134,7 +134,7 @@
 
 ## Multiple or Inconsistent Root Commitments
 ### Exploitation Process
-1. Commitment Publishing: In a secure PoL scheme, the prover (P) is required to publish the root commitment of the liabilities tree on a public bulletin board (PBB), like a blockchain, to ensure all users have a consistent view of the public commitment.
+1. Commitment Publishing: In a secure PoL scheme, the prover (`P`) is required to publish the root commitment of the liabilities tree on a public bulletin board (PBB), like a blockchain, to ensure all users have a consistent view of the public commitment.
 2. Vulnerability Exploitation:
 	- A malicious prover can exploit this by providing different commitments to different users.
 	- These commitments, while individually valid, are not bound to the same root commitment.
