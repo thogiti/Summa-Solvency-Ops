@@ -117,7 +117,8 @@
 1. Initial Setup: The PoL implementation uses a 64-bit truncated SHA256 hash for all nodes in the tree. This level of truncation increases the probability of hash collisions due to the reduced hash space.
 2. Finding Collisions: An adversary or the exchange itself seeks a hash collision for two different user balances. This means finding two different inputs (i.e., user account balances or transaction details) that produce the same 64-bit truncated hash output.
 3. Collision Assignment: Once a collision is found, the exchange can assign both users to the same leaf node in the Merkle tree. This is because both inputs, despite being different, have the same hash representation in the tree.
-4. Under-Reporting Liabilities: With both users assigned to the same leaf node, the exchange can return the same Merkle path for both users. This manipulation allows the exchange to under-report its total liabilities without detection by users, as each user verifies their inclusion in the liabilities tree without realizing the overlap.
+4. For multi-target attacks, an exchange with 16+ millions of users would require about 2^40 of hash invocations to find a match, making this attack practically feasible.
+5. Under-Reporting Liabilities: With both users assigned to the same leaf node, the exchange can return the same Merkle path for both users. This manipulation allows the exchange to under-report its total liabilities without detection by users, as each user verifies their inclusion in the liabilities tree without realizing the overlap.
 
 ### Mitigation Strategy
 1. Avoid Hash Truncation: The primary recommendation is to avoid truncating hashes within the PoL scheme. Full-length SHA256 hashes should be used for all nodes in the tree to drastically reduce the probability of collisions.
