@@ -51,22 +51,60 @@ require(values.length == expectedValuesLength, "Invalid values length");
 
 Implementing these recommendations will significantly reduce the risk associated with this vulnerability by ensuring that only inputs of expected lengths and formats are processed by the contract.
 
-**2. SnarkVerifier.sol**
+## Vulnerabilities in SnarkVerifier.sol
 
-In the `SnarkVerifier.sol` contract, the `verifyProof` function processes input data from calldata without sufficient validation checks on the input sizes and values. This could lead to buffer overflow, underflow, or other unexpected behaviors.
+**1. Input Validation**
+
+- **Description:** The contract does not explicitly validate the size of the proof and instances arrays passed to the `verifyProof` function. While there are checks for the proof length `(success := and(success, eq(0x1500, calldataload(PROOF_LEN_CPTR))))` and the number of instances `(success := and(success, eq(num_instances, calldataload(NUM_INSTANCE_CPTR))))`, these checks rely on the correctness of the data provided in the calldata, which can be manipulated by an attacker.
+
+- **File Path and Line Number(s):** `/contracts/src/SnarkVerifier.sol` Lines 8-11
+
+- **Potential Impact:** An attacker could pass malformed or unexpected input sizes, potentially leading to incorrect execution or unexpected behavior of the contract. This could result in invalid proofs being accepted or valid proofs being rejected.
+
+- **Code Snippets:**
 
 ```solidity
-function verifyProof(
-    address vk,
-    bytes calldata proof,
-    uint256[] calldata instances
-) public view returns (bool) {
-    ...
-    success := and(success, eq(0x1500, calldataload(PROOF_LEN_CPTR)))
-    let num_instances := mload(NUM_INSTANCES_MPTR)
-    success := and(success, eq(num_instances, calldataload(NUM_INSTANCE_CPTR)))
-    ...
-}
+uint256 internal constant    PROOF_LEN_CPTR = 0x64;
+uint256 internal constant        PROOF_CPTR = 0x84;
+uint256 internal constant NUM_INSTANCE_CPTR = 0x1584;
+uint256 internal constant     INSTANCE_CPTR = 0x15a4;
+```
+- **Exploit PoC:** Not applicable due to the nature of the vulnerability, as it pertains to input validation rather than a direct exploit path.
+
+- **Recommendations:** Explicitly check the lengths of the proof and instances arrays within the contract code before processing them. This can be done by adding require statements that validate the expected lengths based on the protocol's specifications.
+
+**2. Integer Overflow/Underflow**
+
+- **Description:** Solidity 0.8.x automatically checks for arithmetic overflows/underflows. Given that the contract is using Solidity ^0.8.0, the risk of integer overflow or underflow is inherently mitigated by the compiler.
+
+- **Potential Impact:** Not applicable due to compiler protections.
+
+- **Exploit PoC:** Not applicable due to compiler protections.
+
+- **Recommendations:** Ensure that all contracts maintain the use of Solidity 0.8.x or higher to automatically benefit from overflow/underflow checks.
+
+- **3. Cryptographic Vulnerabilities**
+
+- **Description:** The contract performs various cryptographic operations, including elliptic curve operations and keccak256 hashing. While the cryptographic primitives themselves are secure, the way they are used and combined can introduce vulnerabilities, especially if the input validation is not properly handled or if assumptions about the cryptographic properties are incorrect.
+
+- **File Path and Line Number(s):** `/contracts/src/SnarkVerifier.sol` Lines 1251-1384
+
+- **Potential Impact:** Improper handling of cryptographic operations could lead to vulnerabilities such as signature malleability, incorrect verification of proofs, or other unintended behaviors.
+
+- **Code Snippets:**
+
+```solidity
+success := ec_pairing(
+    success,
+    mload(PAIRING_LHS_X_MPTR),
+    mload(PAIRING_LHS_Y_MPTR),
+    mload(PAIRING_RHS_X_MPTR),
+    mload(PAIRING_RHS_Y_MPTR)
+);
 ```
 
-The vulnerability here is the lack of validation for the actual content and length of the proof and instances arrays beyond just checking a hardcoded expected length (`0x1500` for proof). This does not ensure that the proof and instances contain valid or expected data, potentially allowing malformed or malicious data to be processed.
+- **Exploit PoC:** A specific exploit cannot be provided without a deeper understanding of the cryptographic protocol and its intended security properties. However, manipulating the inputs to cryptographic functions could potentially lead to vulnerabilities.
+
+- **Recommendations:**
+    - Ensure thorough review and testing of the cryptographic operations, including both unit tests and formal verification where possible.
+    - Consider external audits by cryptography experts to validate the security of the cryptographic operations and their implementation.
