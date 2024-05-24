@@ -111,10 +111,10 @@ success := ec_pairing(
 
 ## Vulnerability Analysis for GrandSumVerifier.sol
 
-- **File Path and Line Numbers:** `contracts/src/GrandSumVerifier.sol` Line Numbers: Various, detailed below.
-
 - **Description of the Issue:**
 The `GrandSumVerifier.sol` contract is designed to verify grand sum proofs. 
+
+- **File Path and Line Numbers:** `contracts/src/GrandSumVerifier.sol` Line Numbers: Various, detailed below.
 
 - **a. Lack of Input Validation (Line: Various)**
 The contract does not perform explicit validation on the inputs to the `verifyProof` function. This lack of validation could lead to incorrect or unexpected behavior.
