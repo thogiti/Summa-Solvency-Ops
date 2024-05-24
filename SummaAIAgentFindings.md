@@ -2,13 +2,21 @@
 
 I fine-tuned a local LLM AI model and tinkered with Summa codebase for any interesting insights. Here are the selected findings from the AI agent on the Summa codebase:
 
-## Input Validation Vulnerabilities 
+## Vulnerability in InclusionVerifier.sol
 
-**1. InclusionVerifier.sol**
+- **Description of the Issue:**
+The smart contract method `verifyProof` does not perform adequate validation on the lengths of the input arrays proofs, challenges, and values before proceeding with operations that assume their correctness. This lack of validation can lead to unexpected behavior or vulnerabilities.
 
-In the `InclusionVerifier.sol` contract, the `verifyProof` function lacks explicit validation for the lengths of the challenges and values arrays passed as input. This can lead to unexpected behavior or manipulation of the contract's logic if the arrays are not of the expected length.
+- **File Path and Line Number(s):**
+    File: `contracts/src/InclusionVerifier.sol`
+    Lines: 23-27, 71-75, 77-81
 
+- **Potential Impact:**
+An attacker could exploit this vulnerability by passing in arrays of unexpected lengths, potentially causing the contract to behave unexpectedly, leading to denial of service or incorrect verification results. Specifically, incorrect lengths could manipulate the flow of the for loop (lines 71-75) and the logic that depends on these lengths.
+
+- **Code Snippets:**
 ```solidity
+// InclusionVerifier.sol
 function verifyProof(
     address vk,
     bytes calldata proofs,
@@ -16,9 +24,10 @@ function verifyProof(
     uint256[] calldata values
 ) public view returns (bool) {
     ...
+    let proof_length := calldataload(PROOF_LEN_CPTR)
+    ...
     let challenges_length_pos := add(add(PROOF_LEN_CPTR, proof_length), 0x20)
     let challenges_length := calldataload(challenges_length_pos)
-    success := and(success, eq(challenges_length, 4))
     ...
     let evaluation_values_length_pos := add(add(challenges_length_pos, mul(challenges_length, 0x20)), 0x20)
     let evaluation_values_length := calldataload(evaluation_values_length_pos)
@@ -26,7 +35,21 @@ function verifyProof(
 }
 ```
 
-The vulnerability lies in the assumption that `challenges_length` should be equal to `4` without explicitly checking the length of the challenges array passed to the function. An attacker could potentially pass a challenges array of a different length, leading to unexpected behavior.
+- **Exploit PoC:**
+An attacker could call `verifyProof` with proofs of length that does not match the expected format (e.g., not divisible by `0x80`), or with challenges and values arrays that do not align with the logic expected by the contract. This could lead to incorrect loop iterations or arithmetic operations based on unchecked lengths.
+
+- **Recommendations:**
+    - Input Validation: Before processing the inputs, explicitly check the lengths of the proofs, challenges, and values arrays to ensure they meet the expected criteria. For example, verify that proofs.length is divisible by `0x80`, and that the lengths of challenges and values are as expected.
+    - Revert on Error: If the validation checks fail, revert the transaction to prevent any state changes or unintended behavior.
+    - Use Solidity's Built-in Functions: Where possible, use Solidity's built-in functions for array length checks and other validations, as they are optimized for gas usage and security.
+
+```solidity
+require(proofs.length % 0x80 == 0, "Invalid proofs length");
+require(challenges.length == expectedChallengesLength, "Invalid challenges length");
+require(values.length == expectedValuesLength, "Invalid values length");
+```
+
+Implementing these recommendations will significantly reduce the risk associated with this vulnerability by ensuring that only inputs of expected lengths and formats are processed by the contract.
 
 **2. SnarkVerifier.sol**
 
