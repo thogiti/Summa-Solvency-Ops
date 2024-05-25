@@ -130,6 +130,11 @@ The contract performs cryptographic operations such as EC point checks and pairi
     - **Overflow/Underflow:** Although mitigated by the compiler version, theoretical issues in manual checks could lead to incorrect calculations or contract states.
     - **Cryptographic Operations:** Flaws in cryptographic operation implementations could allow attackers to bypass verification, leading to false proof acceptance.
 
+- **d. verifyProof Not Being a view Function:**
+The verifyProof function in `GrandSumVerifier.sol` is not marked as view despite not modifying the contract state. This does not lead to a security vulnerability directly but has implications for gas usage and how the function can be called.
+    - **Potential Impact:** Since it's not a view function, it cannot be called off-chain for free using `eth_call`. This means every call to `verifyProof` requires a transaction and gas, even though it doesn't alter the contract state.
+    - **Recommendation:** If the function's logic does not modify the contract state, marking it as view would be more appropriate. This change would allow off-chain calls to `verifyProof`, saving gas and enabling more flexible interactions with the contract.
+
 - **Code Snippets:**
 
 **a. Lack of Input Validation**
